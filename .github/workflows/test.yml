@@ -1,11 +1,23 @@
-name: basic
+name: Test
 
 on:
-  workflow_dispatch:
+  push:
+    branches:
+      - main
 
 jobs:
-  greeter:
+  test:
     runs-on: ubuntu-latest
     steps:
-      - run: echo hello
-      - run: echo goodbye
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22.x"
+
+      - name: Test
+        run: |
+          npm ci
+          npm test
