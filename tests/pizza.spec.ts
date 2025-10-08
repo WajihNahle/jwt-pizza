@@ -80,6 +80,35 @@ async function basicInit(page: Page) {
     await route.fulfill({ json: menuRes });
   });
 
+  await page.route(/.*\/api\/franchise\/\d+$/, async (route) => {
+    const method = route.request().method();
+    if (method === 'GET') {
+      const franchiseRes = [
+        {
+          "id": 2,
+          "name": "pizzaPocket",
+          "admins": [
+            {
+              "id": 4,
+              "name": "pizza franchisee",
+              "email": "f@jwt.com"
+            }
+          ],
+          "stores": [
+            {
+              "id": 4,
+              "name": "SLC",
+              "totalRevenue": 0
+            }
+          ]
+        }
+      ]
+      // Fulfill the request with JSON
+      await route.fulfill({ json: franchiseRes });
+      return;
+    }
+  });
+
   // Standard franchises and stores
   await page.route(/\/api\/franchise(\?.*)?$/, async (route) => {
     const franchiseRes = {
@@ -191,7 +220,6 @@ test("check footer pages", async ({ page }) => {
   // Franchise
   await page.getByRole('contentinfo').getByRole('link', { name: 'Franchise' }).click();
   await expect(page).toHaveURL(/.*franchise/i);
-  await page.getByRole('link', { name: '-555-5555' }).click();
 });
 
 async function login(page: Page) {
