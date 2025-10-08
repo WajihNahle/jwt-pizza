@@ -39,6 +39,29 @@ async function basicInit(page: Page) {
       return;
     }
 
+    if (method === 'POST' && loginReq && loginReq.email) {
+
+      // Construct the response object
+      const loginRes = {
+        user: {
+          name: 'test test',
+          email: 'test@example.com',
+          roles: [{ role: 'diner' }],
+          id: 241
+        },
+        token: 'testtoken123'
+      };
+      // Fulfill the request with JSON
+      await route.fulfill({ json: loginRes });
+      return;
+    }
+
+    if (method === 'DELETE') {
+      // Respond with success
+      await route.fulfill({ status: 200, json: { message: 'Logout successfull' } });
+      return;
+    }
+
     // For all other requests to /api/auth (e.g. GET /api/auth/me), just continue
     await route.continue();
   });
@@ -129,7 +152,7 @@ test('purchase with login', async ({ page }) => {
 });
 
 test("logout and register", async ({ page }) => {
-  await page.goto('/');
+  await basicInit(page);
 
   // Register
   await page.getByRole('link', { name: 'Register' }).click();
