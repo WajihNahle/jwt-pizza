@@ -43,6 +43,15 @@ let loggedInUser: User | undefined;
     await route.continue();
   });
 
+  await page.route(/.*\/api\/franchise\/\d+$/, async (route) => {
+    const method = route.request().method();
+    if (method === 'DELETE') {
+      // Respond with success
+      await route.fulfill({ status: 200, json: { message: 'franchise deleted' } });
+      return;
+    }
+  });
+
   // Return the currently logged-in user
   await page.route('*/**/api/user/me', async (route) => {
     await route.fulfill({ json: loggedInUser });
@@ -65,7 +74,7 @@ let loggedInUser: User | undefined;
           id: 2,
           name: 'LotaPizza',
           stores: [
-            { id: 4, name: 'Lehi' },
+            { id: 4, name: 'testing' },
             { id: 5, name: 'Springville' },
             { id: 6, name: 'American Fork' },
           ],
