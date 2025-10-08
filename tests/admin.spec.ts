@@ -2,3 +2,7 @@
 import { Page } from '@playwright/test';
 import { test, expect } from 'playwright-test-coverage';
 import { User, Role } from '../src/service/pizzaService';
+
+test('login as admin', async ({ page }) => {
+    
+});
