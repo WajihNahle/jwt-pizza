@@ -48,7 +48,6 @@ let loggedInUser: User | undefined;
     if (method === 'DELETE') {
       // Respond with success
       await route.fulfill({ status: 200, json: { message: 'franchise deleted' } });
-      return;
     }
   });
 
