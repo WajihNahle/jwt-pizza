@@ -40,4 +40,14 @@ test('updateUser', async ({ page }) => {
     await page.getByRole('link', { name: 'pd' }).click();
 
     await expect(page.getByRole('main')).toContainText('pizza dinerx');
+
+    //change password
+    await page.getByRole('button', { name: 'Edit' }).click();
+    await page.getByRole('textbox').nth(1).fill('newPassword');
+    await page.getByRole('button', { name: 'Update' }).click();
+
+    //change email
+    await page.getByRole('button', { name: 'Edit' }).click();
+    await page.getByRole('textbox').nth(2).fill('newEmail@jwt.com');
+    await page.getByRole('button', { name: 'Update' }).click();
 });

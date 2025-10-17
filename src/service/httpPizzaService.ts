@@ -122,7 +122,17 @@ class HttpPizzaService implements PizzaService {
     }
     return this.callEndpoint(`/api/docs`);
   }
+
+  async getUsers(page: number = 1, limit: number = 10, name: string = '*') {
+    return this.callEndpoint(`/api/user?page=${page}&limit=${limit}&name=${name}`);
+  }
+
+  async deleteUser(userId: string) {
+    return this.callEndpoint(`/api/user/${userId}`, 'DELETE');
+  }
 }
+
+
 
 const httpPizzaService = new HttpPizzaService();
 export default httpPizzaService;

@@ -69,17 +69,110 @@ let loggedInUser: User | undefined;
   await page.route(/\/api\/franchise(\?.*)?$/, async (route) => {
     const franchiseRes = {
       franchises: [
-        {
-          id: 2,
-          name: 'LotaPizza',
-          stores: [
-            { id: 4, name: 'testing' },
-            { id: 5, name: 'Springville' },
-            { id: 6, name: 'American Fork' },
-          ],
+          {
+            id: 2,
+            name: 'LotaPizza',
+            stores: [
+              { id: 4, name: 'testing' },
+              { id: 5, name: 'Springville' },
+              { id: 6, name: 'American Fork' },
+            ],
+          },
+          { id: 3, name: 'PizzaCorp', stores: [{ id: 7, name: 'Spanish Fork' }] },
+          { id: 4, name: 'topSpot', stores: [] },
+          { id: 5, name: 'CheesyBites', stores: [{ id: 8, name: 'Downtown' }] },
+          { id: 6, name: 'PizzaHub', stores: [{ id: 9, name: 'Uptown' }] },
+          { id: 7, name: 'SliceMasters', stores: [{ id: 10, name: 'Eastside' }] },
+          { id: 8, name: 'PieZone', stores: [{ id: 11, name: 'Westend' }] },
+          { id: 9, name: 'DoughNation', stores: [{ id: 12, name: 'North Point' }] },
+          { id: 10, name: 'PizzaPlanet', stores: [{ id: 13, name: 'South Park' }] },
+          { id: 11, name: 'The Pizza Joint', stores: [{ id: 14, name: 'Old Town' }] },
+          { id: 12, name: 'HotSlice', stores: [{ id: 15, name: 'Riverfront' }] },
+          { id: 13, name: 'Round Table', stores: [{ id: 16, name: 'Hilltop' }] },
+          { id: 13, name: 'Box Table', stores: [{ id: 17, name: 'topy' }] },
+        ]
+        ,
+    };
+    await route.fulfill({ json: franchiseRes });
+  });
+
+  // Standard user
+  await page.route(/\/api\/user(\?.*)?$/, async (route) => {
+    const franchiseRes = {
+      users: [ {
+          id: '1',
+          name: 'Big Boss',
+          email: 'a@jwt.com',
+          password: 'a',
+          roles: [{ role: Role.Admin }],
         },
-        { id: 3, name: 'PizzaCorp', stores: [{ id: 7, name: 'Spanish Fork' }] },
-        { id: 4, name: 'topSpot', stores: [] },
+        {
+          id: '2',
+          name: 'Little Boss',
+          email: 'l@jwt.com',
+          password: 'a',
+          roles: [{ role: Role.Diner }],
+        },
+        {
+          id: '3',
+          name: ' Boss y',
+          email: 'o@jwt.com',
+          password: 'a',
+          roles: [{ role: Role.Admin }],
+        },
+        {
+          id: '4',
+          name: 't t',
+          email: 'p@jwt.com',
+          password: 'a',
+          roles: [{ role: Role.Diner }],
+        },{
+          id: '5',
+          name: 'r r',
+          email: '[@jwt.com',
+          password: 'a',
+          roles: [{ role: Role.Admin }],
+        },
+        {
+          id: '6',
+          name: 'e e',
+          email: 'oi@jwt.com',
+          password: 'a',
+          roles: [{ role: Role.Diner }],
+        },{
+          id: '7',
+          name: 'd d',
+          email: 'esr@jwt.com',
+          password: 'a',
+          roles: [{ role: Role.Admin }],
+        },
+        {
+          id: '8',
+          name: 'c c',
+          email: 'ear@jwt.com',
+          password: 'a',
+          roles: [{ role: Role.Diner }],
+        },{
+          id: '9',
+          name: 'b b',
+          email: 'sg@jwt.com',
+          password: 'a',
+          roles: [{ role: Role.Admin }],
+        },
+        {
+          id: '10',
+          name: 'a a',
+          email: 'fsg@jwt.com',
+          password: 'a',
+          roles: [{ role: Role.Diner }],
+        },
+        {
+          id: '11',
+          name: 'ab ab',
+          email: 'fsg@jwt.com',
+          password: 'a',
+          roles: [{ role: Role.Diner }],
+        }
       ],
     };
     await route.fulfill({ json: franchiseRes });
@@ -91,6 +184,8 @@ let loggedInUser: User | undefined;
     const orderRes = { order: { ...orderReq, id: 23 }, jwt: 'eyJpYXQ' };
     await route.fulfill({ json: orderRes });
   });
+
+  // await page.route()
 
   await page.goto('/');
 }
@@ -119,6 +214,20 @@ test('delete and create franchise', async ({ page }) => {
     await page.getByRole('button', { name: 'Add Franchise' }).click();
     await expect(page.getByRole('button', { name: 'Create' })).toBeVisible();
 });
+
+//login as admin, list user, delete user
+test('list and delete users', async ({ page }) => {
+    await basicInit(page);
+    await login(page);
+
+    //list users
+    await page.getByRole('link', { name: 'Admin' }).click();
+
+    //delete user
+    await page.getByRole('row', { name: 'Big Boss' }).getByRole('button').click();
+
+})
+
 
 async function login(page: Page) {
   await page.getByRole('link', { name: 'Login' }).click();
