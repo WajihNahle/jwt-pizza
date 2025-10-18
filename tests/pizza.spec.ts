@@ -512,6 +512,30 @@ test("logout and register", async ({ page }) => {
   await expect(page.getByRole('link', { name: 'Login' })).toBeVisible();
 });
 
+test("register failure shows error message", async ({ page }) => {
+  await basicInit(page);
+
+  // Override the POST /api/auth route to return an error
+  await page.route("**/api/auth", async (route) => {
+    await route.fulfill({ status: 500, json: { error: "Registration failed" } });
+  });
+
+  // Go to register page
+  await page.getByRole('link', { name: 'Register' }).click();
+
+  // Fill the form
+  await page.getByPlaceholder('Name').fill('error user');
+  await page.getByPlaceholder('Email address').fill('error@example.com');
+  await page.getByPlaceholder('Password').fill('password');
+
+  // Click Register
+  await page.getByRole('button', { name: 'Register' }).click();
+
+  // Expect the error message to be displayed
+  await expect(page.getByRole('main')).toContainText('{"code":500}');
+});
+
+
 test("check footer pages", async ({ page }) => {
   await basicInit(page);
   await login(page);
