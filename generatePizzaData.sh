@@ -1,12 +1,12 @@
 # Check if host is provided as a command line argument
 if [ -z "$1" ]; then
   echo "Usage: $0 <host>"
-  echo "Example: $0 http://localhost:3000"
+  echo "Example: $0 https://pizza-service.nazgul.click"
   exit 1
 fi
 host=$1
 
-response=$(curl -s -X PUT $host/api/auth -d '{"email":"a@jwt.com", "password":"admin"}' -H 'Content-Type: application/json')
+response=$(curl -s -X PUT $host/api/auth -d '{"email":"arakni@jwt.com", "password":"10Nazgul9!"}' -H 'Content-Type: application/json')
 token=$(echo $response | jq -r '.token')
 
 # Add users
